@@ -1,0 +1,97 @@
+body {
+    background-color: grey;
+}
+
+.app {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.calculator {
+    background-color: black;
+    width: 100%;
+    max-width: 400px;
+    max-height: 650px;
+    display: flex;
+    border-radius: 1.25em;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.display {
+    height: 10rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    color: aliceblue;
+}
+
+.display .content {
+    padding-right: 10%;
+}
+
+.display .input {
+    font-size: 200%;
+    font-weight: 400;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 40%;
+}
+
+.display .output {
+    font-size: 120%;
+    font-weight: 400;
+    font-family: Arial, Helvetica, sans-serif;
+    float: right;
+}
+
+.keys {
+    background-color: rgba(6, 216, 6, 0.068);
+    padding: 1.5rem;
+    border-radius: 1.5rem 1.5rem 0 0;
+    color: aliceblue;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    grid-gap: 1rem;
+    font-weight: 300;
+}
+
+.display .input .operator {
+    color: rgba(6, 216, 6, 0.651);
+}
+
+.keys .key {
+    position: relative;
+    cursor: pointer;
+    display: block;
+    height: 0;
+    padding-top: 100%;
+    background-color: rgba(0, 0, 0, 0.644);
+    border-radius: 50%;
+    transition: 0.2s;
+    user-select: none;
+}
+
+.keys .equal {
+    background-color: rgba(6, 216, 6, 0.295);
+}
+
+.keys .equal:hover {
+    background-color: rgba(6, 216, 6, 0.651);
+}
+
+.keys .key .span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 300;
+    font-size: 150%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.keys .opnchar:hover {
+    background-color: rgba(32, 32, 32, 0.753);
+}
