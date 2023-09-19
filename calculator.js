@@ -20,11 +20,97 @@ function occurrence_count(obj, obj_to_seek){
     return j
 }
 
+
+function bracketing(inputs_given){
+    let bracker_var = inputs_given
+    console.log("bracker_var is" + bracker_var)
+    let bracker_var_length = 0
+    let t = 0
+    let s = 1
+    while (t < bracker_var.length){
+        t++
+    }
+    if (occurrence_count(bracker_var, "(") == occurrence_count(bracker_var, ")")){
+        console.log("Here, ma nigga")
+        bracker_var_length = bracker_var.length - 1
+    }
+    else {
+        if (occurrence_count(bracker_var, "(") > occurrence_count(bracker_var, ")")){
+            console.log("Here, ma nigga")
+            s = 3
+        }
+        console.log("Here, ma g")
+        bracker_var_length = bracker_var.length
+    }
+    let bracker_var_array = []
+    let l = 0
+    let k = 0
+    while (l < bracker_var_length) {
+        if (bracker_var[l] == "(" || bracker_var[l] == ")"){
+            bracker_var_array.push(l)
+        }
+        l++
+    }
+    let new_sting = []
+    let sting = bracker_var_array
+    while (k < bracker_var_length){
+        if (bracker_var[bracker_var_array[k]] == "(" && bracker_var[bracker_var_array[k + 1]] == ")"){
+            new_sting.push(bracker_var_array[k])
+            new_sting.push(bracker_var_array[k + 1])
+        }
+        k++
+    }
+    let j = 0
+    while (sting.length > s){
+        console.log('bracketing is here')
+        console.log('sting is ' + sting)
+        for (let i in sting){
+            j = parseInt(i) + 1
+            if (bracker_var[bracker_var_array[i]] == "(" && bracker_var[bracker_var_array[j]] == ")"){
+                console.log(j)
+                console.log("sting is; " + sting)
+                console.log(i)
+                console.log("new_sting is; " + new_sting)
+                console.log("Removing " + sting[i] + " and " + sting[j])
+                sting.splice(i, 2)
+            }
+        }
+    }
+    console.log(sting)
+    console.log(sting[0])
+    if (s == 1){
+        return sting[0]
+    }
+    else {
+        return sting[1]
+    }
+    
+}
+
 function actual_input_to_display(given_input){
-    let inputs_given = given_input.split('')
+    let new_given_input = clean_calculation_display(given_input)
+    console.log("new_given_input" + new_given_input)
+    let inputs_given = new_given_input.split('')
     let v = inputs_given.length - 1;
+    let p = v;
+    //console.log("p is; " + p)
+
+    for (let input_given in inputs_given){
+        console.log("p is; " + input_given)
+        console.log("inputs_given[p] is; " + inputs_given[input_given])
+        if (inputs_given[input_given] == '<span class="operator">(</span>'){
+            inputs_given[input_given] = "("
+        }
+        else if (inputs_given[input_given] == '<span class="operator">)</span>'){
+            inputs_given[input_given] = ")"
+        }
+    }
+    
+    
+    console.log("inputs_given" + inputs_given)
     while (v >= 0){
-        console.log(v)
+        console.log("v is "+ v)
+        console.log(inputs_given)
         console.log(inputs_given[v])
         if (inputs_given[v] == "+") {
             inputs_given[v] = '<span class="operator">+</span>'
@@ -40,24 +126,26 @@ function actual_input_to_display(given_input){
             inputs_given[v] = '<span class="operator">x</span>'
         }
         else if (inputs_given[v] == "(" && inputs_given[v + 1] != "-") {
-            inputs_given[v] = '<span class="operator">(</span>'
+            inputs_given[v] = '('
         }
         else if (inputs_given[v] == ")"){
-            let k = inputs_given.length - 1;
-            while (k >= 0){
-                if (inputs_given[k] == "("){
-                    j = k + 1
-                    let right_side_of_slice = inputs_given.slice(j)
-                    if (right_side_of_slice[1] == "-") {
-                        inputs_given[v] = ')'
-                    }
-                    else {
-                        inputs_given[v] = '<span class="operator">)</span>'
-                    }
-                    break
-                }
-                k--
+            console.log(inputs_given)
+            let k = bracketing(new_given_input)
+            let x = get_close_bracket_position(new_given_input)
+            console.log("K is being given")
+            console.log("k is" + k)
+            console.log("x is being given")
+            console.log("x is" + x)
+            if ((k != undefined && x != undefined) && (k != x) && (inputs_given[parseInt(x) + 1] != "+" && inputs_given[parseInt(x) + 1] != '÷' && inputs_given[parseInt(x) + 1] != "%" && inputs_given[parseInt(x) + 1] != "x" && inputs_given[parseInt(x) + 1] != "-")
+            && (inputs_given[parseInt(x) + 1] != '<span class="operator">+</span>' && inputs_given[parseInt(x) + 1] != '<span class="operator">÷</span>' && inputs_given[parseInt(x) + 1] != "%" && inputs_given[parseInt(x) + 1] != '<span class="operator">x</span>' && inputs_given[parseInt(x) + 1] != '<span class="operator">-</span>')){
+                console.log("inputs_given[p] " + inputs_given[p])
+                console.log("inputs_given[x + 1] " + inputs_given[parseInt(x) + 1])
+                inputs_given[k] = '<span class="operator">(</span>'
+                inputs_given[x] = '<span class="operator">)</span>'
             }
+
+            
+            //console.log("p is; " + p)
         }
         v--
     }
@@ -77,6 +165,45 @@ function clean_backend_calculation_input(input){
     }
     console.log(new_input)
     return new_input
+}
+
+
+function clean_calculation_display(input){
+    let inputs_given = input.split('')
+    let v = inputs_given.length - 1;
+    while (v >= 0){
+        if (inputs_given[v] == '<span class="operator">(</span>') {
+            inputs_given[v] = '('
+            console.log("Here 1 " + inputs_given[v])
+        }
+        else if (inputs_given[v] == '<span class="operator">)</span>'){
+            inputs_given[v] = ')'
+            console.log("Here 2 " + inputs_given[v])
+        }
+        v--
+    }
+    return inputs_given.join('')
+}
+
+
+function get_close_bracket_position(users_input){
+    let bracker_var = users_input
+    console.log("This is the users input; " + bracker_var)
+    let bracker_var_length = bracker_var.length
+    let bracker_var_array = []
+    let k = 0
+    while (k < bracker_var_length) {
+        if (bracker_var[k] == ")"){
+            bracker_var_array.push(k)
+        }
+        k++
+    }
+    console.log(bracker_var_array)
+    console.log(bracker_var_array.length)
+    last_arr = bracker_var_array.length - 1
+    console.log(last_arr)
+    console.log(bracker_var[last_arr])
+    return bracker_var_array[last_arr]
 }
 
 
@@ -203,6 +330,7 @@ for (let key of keys){
         }
         else if (value == "="){
             console.log(input)
+            console.log(bracketing())
             let result = clean_backend_calculation_input(input)
             calculator_output.innerHTML = eval(result)
         }
@@ -213,30 +341,60 @@ for (let key of keys){
         }
         else if (value == "brackets"){
             let inputted_text = calculator_display
+            let inputted_text_length = inputted_text.length - 1;
             console.log(inputted_text)
             if (inputted_text == ""){
+                console.log("Here charley")
+                calculator_display = inputted_text + "("
+                input += "("
+                user_input.innerHTML = actual_input_to_display(calculator_display)
+            }
+            else if (inputted_text[inputted_text_length] == '('){
+                console.log("Here 2 charley")
                 calculator_display = inputted_text + "("
                 input += "("
                 user_input.innerHTML = actual_input_to_display(calculator_display)
             }
             else if((inputted_text.indexOf("+") == -1 && inputted_text.indexOf('÷') == -1 && inputted_text.indexOf("%") == -1 && inputted_text.indexOf("x") == -1 && inputted_text.indexOf("-") == -1 && inputted_text.indexOf("(") == -1 && inputted_text.indexOf(")") == -1)){
-                console.log("Over here, Sir")
+                console.log("Here 3 charley")
                 calculator_display = "(" + inputted_text
                 input = "(" + input
                 user_input.innerHTML = actual_input_to_display(calculator_display) 
             }
-            else {
-                console.log("Over here rather, Sir")
+            else if (occurrence_count(inputted_text, "(") > occurrence_count(inputted_text, ")")){
+                console.log(occurrence_count(inputted_text, "("))
+                console.log(occurrence_count(inputted_text, ")"))
+                console.log("Here 3 too charley")
                 let k = inputted_text.length - 1;
+                if (inputted_text[k] == "+" || inputted_text[k] == '÷' || inputted_text[k] == "%" || inputted_text[k] == "x" || inputted_text[k] == "-"){
+                    calculator_display = inputted_text + "("
+                    input += "("
+                    user_input.innerHTML = actual_input_to_display(calculator_display)
+                }
+                else {
+                    calculator_display = inputted_text + ")"
+                    input += ")"
+                    user_input.innerHTML = actual_input_to_display(calculator_display) 
+                }
+            }
+            else {
+                var k = inputted_text.length - 1;
+                console.log(k)
                 while (k >= 0){
                     if (inputted_text[k] == ")"){
+                        console.log("Here 4 charley")
+                        console.log(k)
+                        console.log(input[k + 1])
+                        console.log(inputted_text[k + 1])
                         if (k == inputted_text.length - 1){
+                            console.log("Here 4 too, charley")
                             calculator_display = inputted_text + "x("
                             input += "*("
                             user_input.innerHTML = actual_input_to_display(calculator_display)
                         }
-                        else if ((input[k + 1] == "*" && input[k + 1] == "+" || input[k + 1] == '÷' || input[k + 1] == "%" || input[k + 1] == "-") 
-                        && (inputted_text[k + 2] == "x" || inputted_text[k + 2] == "+" || inputted_text[k + 2] == '÷' || inputted_text[k + 2] == "%" || inputted_text[k + 2] == "-")) {
+                        else if ((input[k + 1] == "*" || input[k + 1] == "+" || input[k + 1] == '÷' || input[k + 1] == "%" || input[k + 1] == "-") 
+                        && (inputted_text[k + 1] == "x" || inputted_text[k + 1] == "+" || inputted_text[k + 1] == '÷' || inputted_text[k + 1] == "%" || inputted_text[k + 1] == "-")) {
+                            console.log("Here 4 too two, charley")
                             calculator_display = inputted_text + "("
                             input += "("
                             user_input.innerHTML = actual_input_to_display(calculator_display)
@@ -244,6 +402,7 @@ for (let key of keys){
                         break;
                     }
                     else if (inputted_text[k] == "("){
+                        console.log("Here 5 charley")
                         calculator_display = inputted_text + ")"
                         input += ")"
                         user_input.innerHTML = actual_input_to_display(calculator_display)
